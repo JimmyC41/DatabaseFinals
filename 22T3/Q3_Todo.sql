@@ -1,0 +1,2 @@
+-- Write an SQL function that prints a summary of horses' gender and age for a
+-- given type of race.

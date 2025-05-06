@@ -1,0 +1,23 @@
+(A)
+- Displays all courses taken by a student, grouped by term
+- Course information includes the code, title and mark
+- Finally, it displays the average mark weighted by UOC
+
+(B)
+- If a student has not taken a course, then tot2/tot1 would result in a division
+by 0 error
+
+(C)
+- 1 query to get all 10 terms
+- 10 queries for each term to fetch courses
+- 11 queries in total
+
+(D)
+
+query = """
+    SELECT c.term, c.code, c.title, c.uoc, e.mark
+    FROM Enrolments
+    JOIN Courses as c on c.id = e.course
+    WHERE student = %s
+    ORDER BY c.term;
+"""

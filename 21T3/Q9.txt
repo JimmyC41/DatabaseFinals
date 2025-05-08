@@ -1,0 +1,61 @@
+(A) Describe what conditions are being checked in pre_booking_check()?
+
+If operation is insert:
+- Check if the flight no is valid
+- Check the flight is not full: if bookings = seat, raise an exception
+- Otherwise, return the new record
+
+If operation is delete:
+- Check if the flight no is valid
+- Otherwise, return the old record
+
+(B) Suggest what other conditions could be checked in pre_booking_check()?
+
+For both:
+- Check the flight's hasn't already departed
+
+If operation is insert:
+- Check the seat hasn't been booked
+- Check the passenger hasn't booked another seats
+
+If operation is delete:
+- Check the seat has been booked
+
+(C) Describe what happens when the following SQL statement is executed on flight QF01, where seat 25-D is currently empty
+insert into Bookings values ('QF01','John Smith','25-D');
+
+pre_booking check:
+- Check QF01 exists
+- Check if the flight is full
+
+Standard constraint checking e.g. data types, user defined constraints
+
+post_booking_update:
+- Increment nseats booked for the flight
+
+
+(D) Describe what happens when the following SQL statement is executed on a full flight QF02
+insert into Bookings values ('QF02','John Smith','25-D');
+
+pre_booking check:
+- CHeck QF01 exists
+- Exception raised since flight is full
+
+No further action
+
+(E) Describe what happens when the following SQL statement is executed on flight QF03, which already has a booking in seat 15-F
+delete from Bookings where flight_no = 'QF03' and seat_no = '15-F';
+
+pre_booking_check:
+- Check if QF03 exists
+- Check if the flight is full
+
+Standard constraint checking e.g. data types, user defined constraints
+
+post_booking_update:
+- Decrement nseats for the flight
+
+Remove the tuple where flight_no = 'QF03' and seat_no = '15-F'
+
+
+

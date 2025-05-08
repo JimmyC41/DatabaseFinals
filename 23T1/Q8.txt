@@ -1,0 +1,30 @@
+(A)
+select given, family from Customers
+where lives_in = 'Kingsford';
+
+tmp = sel[lives_in = 'Kingsford'](Customers)
+Res = proj[given, family](tmp)
+
+(B)
+select a.id, a.balance
+from Accounts a join Branches b on a.held_at = b.id
+where b.location = 'Mascot'
+
+tmp1(aid, balance, branch) = Accounts
+tmp2(bid) = select[location = 'Mascot](Branches)
+tmp3(aid, balance, branch, bid) = tmp1 join[branch = bid] tmp2
+result(id, balance) = proj[aid, balance] tmp3
+
+(C)
+select c.given, c.family, t.source, t.amount
+from Transactions t
+join Customers c on t.actor = c.id
+join Accounts a on t.source = a.id
+join Branches b on a.held_at = b.id
+where t.tdate < '2022-05-01' and t.type = 'withdrawal';
+
+tmp1 = sel[ttype = 'withdrawal' && tdate < '2022-05-1'](Transactions)
+tmp2 = tmp1 join[tmp1.actor = Customers.id] Customers
+tmp3 = tmp2 join [tmp2.source = Accounts.id] Accounts
+tmp4 = tmp3 join [tmp3.held_at  = Branches.id] Branches
+result(given, family, source, amount) = Proj[given, family, source, amount](tmp8)

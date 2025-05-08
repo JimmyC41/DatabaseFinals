@@ -1,0 +1,27 @@
+(A)
+Subsequent execution times for the same query are all around 0.28 ms. Why
+is the first execution so much slower? Assume that the database server started
+just before the first query.
+
+
+Postgres keeps shared buffers which caches pages read from tables and indexes.
+On first execution, none of the pages read are in cache (cache miss) so Postgres
+issues a physical read from risk. On subseuqent executions however, the page 
+exists in the shared buffer, resulting in a cache miss and a logical read from
+memory. This is a magnitude faster than fetching from disk.
+
+(B)
+Subsequent executions of the queries have similar timing. Why is the first
+query faster than the second?
+
+id is the primary key, Postgres builds a B-tree index on that column. To find
+max(id), the planner performs an Index Scan backward. The planner starts at the
+B-tree's rightmost leaf and reads the first entry.
+
+O(logN) to find the leaf, and O(1) to fetch the first entry.
+
+There is no index on birthday, so the planner falls back to a Sequential Scan
+of the entire table. This involves reading every heap page, extracting the
+birthday column from each row.
+
+O(1) for extraction * O(N) pages

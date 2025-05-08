@@ -1,0 +1,36 @@
+(A) select name from Students;
+
+Res(name) = Proj[name](Students)
+
+# 10000 results
+
+(B) select distinct age from Students;
+
+Res(name) = Proj[age](Students)
+
+# 10 results
+
+(C) select name from Students where id = 5812345;
+
+Tmp = Sel[id=5812345](Students)
+Res(name) = Proj[name](Tmp)
+
+# 1 results
+
+(D) select name from Students here age between 18 and 21;
+
+Temp = Sel[age < 22](Students)
+Res(name) = Proj[name](Temp)
+
+# 4000 results
+
+(E)
+select s.id, e.mark
+from Students s 
+join Enrolments e on (s.id = e.stu)
+where s.id = 5812345;
+
+Tmp = Sel[id = 5812345](Students)
+Res(id, mark) = Join[id = stu](Tmp, Enrolments)
+
+# 4 results
